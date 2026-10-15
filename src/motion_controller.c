@@ -72,6 +72,12 @@ bool motion_controller_move_to_at(motion_controller_t *c,
         return false;
     }
 
+    if ((target > c->position_counts && c->positive_limit_active) ||
+        (target < c->position_counts && c->negative_limit_active)) {
+        latch_fault(c, MOTION_FAULT_LIMIT);
+        return false;
+    }
+
     c->target_counts = target;
     c->state = target == c->position_counts ? MOTION_STATE_IDLE : MOTION_STATE_MOVING;
     c->last_progress_counts = c->position_counts;
@@ -96,6 +102,11 @@ void motion_controller_update_feedback_at(motion_controller_t *c,
     }
 
     c->position_counts = measured;
+
+    if (measured < c->soft_min_counts || measured > c->soft_max_counts) {
+        latch_fault(c, MOTION_FAULT_LIMIT);
+        return;
+    }
 
     if (c->state == MOTION_STATE_MOVING &&
         measured != c->last_progress_counts) {
