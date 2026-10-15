@@ -13,7 +13,8 @@ Run the CMake build and unit tests in the README. These validate portable state-
 | Encoder direction | Rotate shaft a known amount in both directions | Counts/revolution, sign |
 | Homing repeatability | Run at least 20 homing cycles | Reference spread |
 | Position accuracy | Move both directions at multiple targets | Target, measured position, error |
-| Following-error fault | Safely inhibit movement or use a simulator fault | Detection time and state |
+| Stall fault | Inhibit virtual/physical movement while commanded to move | Detection time and state |
+| Encoder drift | Change feedback while idle beyond the configured tolerance | Fault code and detection behaviour |
 | Limit switches | Trigger during a low-speed move | Stop response and false triggers |
 | Stop latency | Stop at several configured speeds | Time and travel distance |
 
