@@ -18,7 +18,7 @@ int main(void)
         return 1;
     }
 
-    virtual_plant_init(&plant, 0, 40U);
+    virtual_plant_init(&plant, 0, 20U);
     puts("Closed-loop stepper controller host demo (simulated)");
 
     if (!motion_controller_start_homing(&controller)) {
@@ -26,8 +26,7 @@ int main(void)
         return 1;
     }
     motion_controller_home_switch(&controller);
-    printf("Homing complete: position=%" PRId32 " counts\n",
-           controller.position_counts);
+    printf("Homing complete: position=%" PRId32 " counts\n", controller.position_counts);
 
     if (!motion_controller_move_to(&controller, 1000)) {
         fputs("move command rejected\n", stderr);
@@ -35,10 +34,9 @@ int main(void)
     }
     virtual_plant_set_target(&plant, controller.target_counts);
 
-    for (tick = 0U; tick < 30U; ++tick) {
+    for (tick = 0U; tick < 50U; ++tick) {
         virtual_plant_tick(&plant);
         motion_controller_update_feedback(&controller, plant.position_counts);
-
         if (tick % 5U == 0U) {
             printf("tick=%u position=%" PRId32 " target=%" PRId32
                    " speed_hint=%" PRIu32 " state=%d\n",
