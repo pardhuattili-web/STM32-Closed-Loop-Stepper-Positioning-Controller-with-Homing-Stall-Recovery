@@ -9,7 +9,7 @@ A portfolio project for precision motion control on STM32. This repository provi
 - Position commands and a bounded motion state machine
 - Integer-based speed/stopping-distance helper
 - Homing and soft-limit transitions
-- Encoder following-error and latched-fault handling
+- Encoder feedback handling, limit checks, and time-based no-progress stall detection
 - Separation of portable logic from hardware-specific code
 - CMake host tests and GitHub Actions CI
 
@@ -30,7 +30,7 @@ The demo exercises state transitions using simulated feedback. It is not a subst
 
 - Positions are expressed in **encoder counts**; one encoder count is not necessarily one motor step.
 - A hardware adapter must convert profile output to timer-generated step pulses and sample encoder position safely.
-- The speed helper is a conservative stopping-distance calculation, not yet a full timer-driven trapezoidal trajectory generator.
+- The speed helper is a conservative stopping-distance calculation, not yet a full timer-driven trapezoidal trajectory generator. The no-progress detector requires periodic calls to `motion_controller_check_stall()` with a monotonic millisecond tick; tune the timeout for the mechanics and speed.
 - Homing must be implemented in the platform layer: seek slowly, debounce the switch, back off, re-approach, then assign the reference coordinate.
 - Following-error thresholds depend on encoder resolution, mechanics, load, and speed.
 
@@ -63,7 +63,7 @@ Host tests cover portable state logic and the profile helper. Before presenting 
 ## Roadmap
 
 - [x] Portable control core and host build
-- [x] Deterministic virtual plant and unit tests
+- [x] Deterministic virtual plant, release-safe unit checks, and simulated stall injection
 - [x] CI plus architecture/wiring/validation documentation
 - [ ] STM32 HAL timer and encoder adapters
 - [ ] UART command parser and diagnostics
