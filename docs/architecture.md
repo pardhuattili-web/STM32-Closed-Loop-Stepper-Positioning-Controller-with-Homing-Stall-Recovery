@@ -16,4 +16,4 @@ The code has three layers:
 
 ## Safety boundaries
 
-The portable core cannot guarantee physical stopping distance or safe mechanics. Hardware integration must use conservative speed/acceleration/travel limits, debounce switches, default the driver to disabled during reset, and validate pulse timing. Do not implement high-rate pulses using blocking delays.
+The portable core includes a time-based no-progress stall detector that must be called periodically with a monotonic millisecond tick. It detects lack of encoder count changes, not all possible torque-loss or trajectory-following faults. The portable core cannot guarantee physical stopping distance or safe mechanics. Hardware integration must use conservative speed/acceleration/travel limits, debounce switches, default the driver to disabled during reset, and validate pulse timing. Do not implement high-rate pulses using blocking delays.
