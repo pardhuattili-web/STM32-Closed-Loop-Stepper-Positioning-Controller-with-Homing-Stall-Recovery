@@ -96,6 +96,16 @@ static void test_limit_switch(void)
     CHECK(c.fault == MOTION_FAULT_LIMIT);
 }
 
+static void test_idle_encoder_drift(void)
+{
+    motion_controller_t c;
+    CHECK(motion_controller_init(&c, -1000, 1000, 20U));
+    home_controller(&c);
+    motion_controller_update_feedback_at(&c, 50, 100U);
+    CHECK(c.state == MOTION_STATE_FAULT);
+    CHECK(c.fault == MOTION_FAULT_FOLLOWING_ERROR);
+}
+
 static void test_stop_and_profile(void)
 {
     motion_controller_t c;
@@ -124,6 +134,7 @@ int main(void)
     test_stall_detection();
     test_progress_resets_stall_timer();
     test_limit_switch();
+    test_idle_encoder_drift();
     test_stop_and_profile();
     puts("All motion-controller tests passed.");
     return EXIT_SUCCESS;
