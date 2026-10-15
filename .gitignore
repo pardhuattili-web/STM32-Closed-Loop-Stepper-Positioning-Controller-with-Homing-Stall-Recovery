@@ -1,0 +1,14 @@
+build/
+cmake-build-*/
+.vscode/
+.idea/
+*.elf
+*.hex
+*.bin
+*.map
+*.list
+*.o
+*.d
+Debug/
+Release/
+*.ioc
