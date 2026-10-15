@@ -15,8 +15,8 @@ bool motion_controller_init(motion_controller_t *controller, int32_t soft_min_co
 bool motion_controller_start_homing(motion_controller_t *controller);
 void motion_controller_home_switch(motion_controller_t *controller);
 bool motion_controller_move_to(motion_controller_t *controller, int32_t target_counts);
-/* Update measured position. Following error is only evaluated when idle, because
- * this core does not yet model trajectory phase or expected position per tick. */
+/* Updates measured position. The baseline detects final position error when idle;
+ * trajectory-aware stall monitoring requires expected-position/time-window inputs. */
 void motion_controller_update_feedback(motion_controller_t *controller, int32_t measured_position_counts);
 void motion_controller_set_limits(motion_controller_t *controller, bool negative_active, bool positive_active);
 void motion_controller_stop(motion_controller_t *controller);
